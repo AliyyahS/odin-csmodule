@@ -10,6 +10,17 @@ class HashMap {
     constructor(size) {
         this.size = size
         this.buckets = new Array(size).fill(null)
+        this.loadFactor = 0.75
+    }
+
+    resize() {
+        const initialSize = this.size
+        this.size = initialSize * 2
+
+        for (let i = initialSize; i < this.size; i++) {
+            this.buckets.push(null)
+        }
+        return
     }
 
     hash(key) {
@@ -24,6 +35,8 @@ class HashMap {
     }
 
     set(key, value) {
+        if (this.length() / this.size >= this.loadFactor) this.resize()
+
         const pair = new Pair(key, value)
         const index = this.hash(key)
 
